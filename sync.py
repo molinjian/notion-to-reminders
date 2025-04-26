@@ -9,7 +9,8 @@ import json
 import subprocess
 import requests
 from dotenv import load_dotenv
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
+import pytz
 
 # Load environment variables
 load_dotenv()
@@ -23,8 +24,11 @@ REMINDERS_LIST = os.getenv("REMINDERS_LIST_NAME", "个人提醒")
 NOTION_VERSION = "2022-06-28"
 NOTION_API_URL = "https://api.notion.com/v1"
 
-# 获取今天的日期（UTC时间）
-today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+# 设置时区为北京时间
+beijing_tz = pytz.timezone('Asia/Shanghai')
+
+# 获取今天的日期（北京时间）
+today = datetime.now(beijing_tz).strftime("%Y-%m-%d")
 
 if not NOTION_TOKEN or not DATABASE_ID:
     print("错误：请确保在 .env 文件中设置了 NOTION_TOKEN 和 NOTION_DATABASE_ID")
@@ -86,8 +90,10 @@ def add_reminder(title, list_name, due_date=None):
             set year of dueDate to {date_obj.year}
             set month of dueDate to {date_obj.month}
             set day of dueDate to {date_obj.day}
+            set hours of dueDate to 9
+            set minutes of dueDate to 30
             set remind me date of newReminder to dueDate
-    '''
+'''
     
     script += '''
         end tell

@@ -9,7 +9,8 @@ import json
 import subprocess
 import requests
 from dotenv import load_dotenv
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
+import pytz
 
 # Load environment variables
 load_dotenv()
@@ -22,6 +23,12 @@ REMINDERS_LIST = os.getenv("REMINDERS_LIST_NAME", "提醒事项测试")
 # Notion API 配置
 NOTION_VERSION = "2022-06-28"
 NOTION_API_URL = "https://api.notion.com/v1"
+
+# 设置时区为北京时间
+beijing_tz = pytz.timezone('Asia/Shanghai')
+
+# 获取今天的日期（北京时间）
+today = datetime.now(beijing_tz).strftime("%Y-%m-%d")
 
 def run_applescript(script):
     """Execute AppleScript command"""
