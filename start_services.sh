@@ -1,8 +1,8 @@
 #!/bin/bash
 
 
-chmod +x /Users/molinjian/Works/notion-to-reminders/sync.py
-chmod +x /Users/molinjian/Works/notion-to-reminders/reverse_sync.py
+chmod +x sync.py
+chmod +x reverse_sync.py
 
 # 复制 plist 文件到 LaunchAgents 目录
 cp com.user.notion-to-reminders.plist ~/Library/LaunchAgents/
