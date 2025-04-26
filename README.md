@@ -1,13 +1,15 @@
 # Notion to Apple Reminders Sync
 
-这个项目用于将 Notion 数据库中的任务自动同步到 Apple 提醒事项中。
+这个项目用于在 Notion 数据库和 Apple 提醒事项之间进行双向同步。
 
 ## 功能特点
 
 - 自动同步 Notion 数据库中的任务到 Apple 提醒事项
+- 自动同步 Apple 提醒事项中的任务到 Notion 数据库
 - 支持自定义同步频率
 - 支持选择目标提醒事项列表
 - 自动跳过已存在的提醒事项
+- 支持设置提醒事项的截止日期
 
 ## 安装要求
 
@@ -40,6 +42,7 @@
 
 ## 使用方法
 
+### Notion 到 Reminders 同步
 1. 手动运行同步：
    ```bash
    python sync.py
@@ -57,8 +60,30 @@
 
    - 或使用 launchd（推荐）：
      ```bash
-     cp com.user.notionsync.plist ~/Library/LaunchAgents/
-     launchctl load ~/Library/LaunchAgents/com.user.notionsync.plist
+     cp com.user.notion-to-reminders.plist ~/Library/LaunchAgents/
+     launchctl load ~/Library/LaunchAgents/com.user.notion-to-reminders.plist
+     ```
+
+### Reminders 到 Notion 同步
+1. 手动运行同步：
+   ```bash
+   python reverse_sync.py
+   ```
+
+2. 设置自动同步：
+   - 使用 crontab：
+     ```bash
+     crontab -e
+     ```
+     添加以下行（每小时同步一次）：
+     ```
+     30 * * * * /usr/bin/python3 /path/to/your/notion-to-reminders/reverse_sync.py >> /path/to/your/notion-to-reminders/reverse_sync.log 2>&1
+     ```
+
+   - 或使用 launchd（推荐）：
+     ```bash
+     cp com.user.notion-to-reminders-reverse.plist ~/Library/LaunchAgents/
+     launchctl load ~/Library/LaunchAgents/com.user.notion-to-reminders-reverse.plist
      ```
 
 ## 配置说明
@@ -82,13 +107,16 @@
 ## 故障排除
 
 1. 检查日志文件：
-   - `sync.log`：标准输出日志
-   - `sync_error.log`：错误日志
+   - `sync.log`：Notion 到 Reminders 的标准输出日志
+   - `sync_error.log`：Notion 到 Reminders 的错误日志
+   - `reverse_sync.log`：Reminders 到 Notion 的标准输出日志
+   - `reverse_sync_error.log`：Reminders 到 Notion 的错误日志
 
 2. 常见问题：
    - 确保 `.env` 文件中的配置正确
    - 确保 Notion 数据库已正确分享给集成
    - 确保系统已授权 Python 访问提醒事项
+   - 如果同步失败，检查日志文件中的具体错误信息
 
 ## 贡献
 
